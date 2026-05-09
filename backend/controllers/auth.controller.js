@@ -3,6 +3,7 @@ const Admin = require('../models/Admin.model');
 const Vendor = require('../models/Vendor.model');
 const jwt = require('jsonwebtoken');
 const { ApiResponse } = require('../utils/response.utils');
+const { sendEmail, emailTemplates } = require('../utils/email.utils');
 
 // Simple function to generate token
 const generateToken = (id, role) => {
@@ -114,6 +115,73 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+const getModelByRole = (role = 'user') => {
+  if (role === 'admin') return Admin;
+  if (role === 'vendor') return Vendor;
+  return User;
+};
+
+const generateResetToken = (email, role = 'user') => {
+  return jwt.sign(
+    { email, role },
+    process.env.JWT_RESET_SECRET || 'reset_secret',
+    { expiresIn: '1h' }
+  );
+};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email, role = 'user' } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    const Model = getModelByRole(role);
+    const account = await Model.findOne({ email });
+
+    if (account) {
+      const token = generateResetToken(email, role);
+      const emailData = emailTemplates.passwordReset(account.name, token, role);
+      await sendEmail({ to: email, ...emailData });
+    }
+
+    ApiResponse(res, 200, 'If the email exists, a password reset link has been sent.', {});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) {
+      return res.status(400).json({ message: 'Token and password are required' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_RESET_SECRET || 'reset_secret');
+    const { email, role } = decoded;
+    const Model = getModelByRole(role);
+    const account = await Model.findOne({ email });
+
+    if (!account) {
+      return res.status(404).json({ message: 'Account not found' });
+    }
+
+    account.password = password;
+    await account.save();
+
+    ApiResponse(res, 200, 'Password reset successful', { role });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(400).json({ message: 'Reset token expired' });
+    }
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(400).json({ message: 'Invalid reset token' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // ─── Logout ───────────────────────────────────────────────────────────────────
 const logout = async (req, res) => {
   try {
@@ -124,5 +192,14 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, registerVendor, loginVendor, loginAdmin, logout };
+module.exports = {
+  registerUser,
+  loginUser,
+  registerVendor,
+  loginVendor,
+  loginAdmin,
+  forgotPassword,
+  resetPassword,
+  logout,
+};
 

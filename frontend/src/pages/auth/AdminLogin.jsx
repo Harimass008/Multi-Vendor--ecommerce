@@ -1,6 +1,6 @@
 // AdminLogin.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store';
 import toast from 'react-hot-toast';
 
@@ -33,6 +33,9 @@ export default function AdminLogin() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input type="password" className="input" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required />
+          </div>
+          <div className="flex justify-end">
+            <Link to="/forgot-password?role=admin" className="text-sm text-accent hover:underline">Forgot password?</Link>
           </div>
           <button type="submit" disabled={isLoading} className="w-full bg-accent text-white py-2 rounded-lg font-medium hover:opacity-90">
             {isLoading ? 'Authenticating...' : 'Login'}

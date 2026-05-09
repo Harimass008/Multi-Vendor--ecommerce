@@ -26,11 +26,14 @@ export function VendorLogin() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" className="input" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
+            <input type="email" className="input" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" className="input" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
+            <input type="password" className="input" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required />
+          </div>
+          <div className="flex justify-end">
+            <Link to="/forgot-password?role=vendor" className="text-sm text-dark hover:underline">Forgot password?</Link>
           </div>
           <button type="submit" disabled={isLoading} className="w-full bg-dark text-white py-2 rounded-lg font-medium hover:bg-dark-800 transition-colors">
             {isLoading ? 'Signing in...' : 'Sign In'}

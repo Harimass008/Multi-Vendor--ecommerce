@@ -12,6 +12,9 @@ r.post('/vendor/login', c.loginVendor);
 
 r.post('/admin/login', c.loginAdmin);
 
+r.post('/forgot-password', c.forgotPassword);
+r.post('/reset-password', c.resetPassword);
+
 r.post('/logout', c.logout);
 
 module.exports = r;

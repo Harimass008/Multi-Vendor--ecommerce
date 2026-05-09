@@ -25,6 +25,7 @@ import VendorLogin from './pages/auth/VendorLogin';
 import VendorRegister from './pages/VendorRegister';
 import AdminLogin from './pages/auth/AdminLogin';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Vendor Pages
 import VendorDashboard from './pages/vendor/Dashboard';
@@ -61,6 +62,7 @@ export default function App() {
         <Route path="/vendor/register" element={<VendorRegister />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* User Routes */}
         <Route path="/" element={<UserLayout />}>
