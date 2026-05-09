@@ -4,9 +4,12 @@ A full-stack multi-vendor eCommerce platform built with **Node.js + Express + Mo
 
 ---
 
+
 ## 📁 Project Structure
 
 ```
+
+
 multivendor-ecommerce/
 ├── backend/
 │   ├── config/
@@ -302,5 +305,6 @@ pending → paid → processing → shipped → delivered → completed
 - **Socket.io**: Real-time chat between user and vendor
 - **Bulk Upload**: CSV product import for vendors
 - **PWA**: Add service workers for offline support
-#   M u l t i - V e n d o r - - e c o m m e r c e  
+#   M u l t i - V e n d o r - - e c o m m e r c e 
+ 
  
