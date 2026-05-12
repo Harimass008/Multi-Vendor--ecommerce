@@ -43,6 +43,11 @@ app.get('/', (req, res) => {
   res.send('API is running successfully! 🚀');
 });
 
+
+app.get('/api', (req, res) => {
+  res.send('API is sucessfully 🚀');
+});
+
 // 5. Database Connection and Server Start
 const PORT = process.env.PORT
 const MONGO_URI = process.env.MONGO_URI 
